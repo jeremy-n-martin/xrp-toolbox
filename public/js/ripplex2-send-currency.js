@@ -1,14 +1,20 @@
 // *******************************************************
 // **************** Configure Account ********************
 // *******************************************************
-      
+    
+// Button "configure account" calls this function with the parameter "standby" or "operational"
+// to configure the account. The defaultRippleSetting is false by defaut (rippling fobidden)
 async function configureAccount(type, defaultRippleSetting) {
+
+  // Connect to the ledger
   let net = getNet()
   let resultField = 'standbyResultField'
   const client = new xrpl.Client(net)
   results = 'Connecting to ' + net + '....'
   await client.connect()
   results += '\nConnected, finding wallet.'
+
+  // Get the account wallets
   if (type=='standby') {
     my_wallet = xrpl.Wallet.fromSeed(standbySeedField.value)
   } else {
@@ -18,6 +24,9 @@ async function configureAccount(type, defaultRippleSetting) {
   results += '\nRipple Default Setting: ' + defaultRippleSetting
   resultField.value = results
 
+  // Prepare the transaction. If the defaultRippleSetting is true, set the asfDefaultRipple flag.
+  // "false" means rippling fobidden : the currency transferred from one account CAN ONLY be transferred back to the same account.
+  // To enable currency transfer to third parties, you need to set the rippleDefault value to true
   let settings_tx = {}
   if (defaultRippleSetting) {
     settings_tx = {
@@ -35,8 +44,9 @@ async function configureAccount(type, defaultRippleSetting) {
     results += '\n Clear Default Ripple flag.' 
   }
   results += '\nSending account setting.'   
-  resultField.value = results      
+  resultField.value = results
 
+  // Auto-fill the default values for the transaction, sign it, submit it, wait and report the result.
   const prepared = await client.autofill(settings_tx)
   const signed = my_wallet.sign(prepared)
   const result = await client.submitAndWait(signed.tx_blob)
@@ -228,7 +238,7 @@ async function oPcreateTrustline() {
     operationalResultField.value = results     
     throw 'Error sending transaction: ${ts_result.result.meta.TransactionResult}'
   }
-} //End of oPcreateTrustline
+} //End of oP createTrustline
       
 // *******************************************************
 // ************* Operational Send Issued Currency ********
