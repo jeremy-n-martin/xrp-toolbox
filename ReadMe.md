@@ -1,5 +1,11 @@
-# Quickstart JavaScript Examples
+# Xrp simple toolbox + examples
 
-Run a test harness for XRPL features using HTML UI and JavaScript module files.
+install npm, node first
 
-The examples are iterative, building one on another to gradually introduce new behavior. For a full explanation, see the XRPL Quickstart Tutorial (JavaScript).
+npm i xrpl
+npm i
+
+then use node on the js files on root :
+- server.js launch a toolbox server with front
+- files 1 at 5 are mvp examples for console and learning
+- the folder bridge app contains a EVM-bridge demo with front
